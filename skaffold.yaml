@@ -1,0 +1,28 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+manifests:
+  rawYaml:
+    - './infrastructure/k8s/*'
+deploy:
+  kubectl: {}
+build:
+  local:
+    push: false
+  artifacts:
+    - image: oleksiihryhurko/ticketing-app:users
+      context: users
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
+    - image: oleksiihryhurko/ticketing-app:client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: '**/*.js'
+  
